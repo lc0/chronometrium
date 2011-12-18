@@ -25,6 +25,46 @@ public class ActivityP {
 		return "http://chronometrium.apphb.com/Profile/" + userId;
 	}
 	
+	public double getCoordX() {
+		return coordX;
+	}
+
+	public void setCoordX(double coordX) {
+		this.coordX = coordX;
+	}
+
+	public double getCoordY() {
+		return coordY;
+	}
+
+	public void setCoordY(double coordY) {
+		this.coordY = coordY;
+	}
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public double getRadius() {
+		return radius;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
 	public boolean isInside(double x, double y) {
 		//return radius > Math.sqrt((coordX-x)*(coordX-x) + (coordY-y)*(coordY-y));
 		double d2r = (Math.PI / 180.0);

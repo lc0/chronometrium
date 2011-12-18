@@ -18,129 +18,52 @@ public class Storage {
     private static final int DATABASE_VERSION = 1;
     private DatabaseHelper DBHelper;
     private SQLiteDatabase db;
-	private Random random;
 	private Context context;
 
     public Storage (Context ctx) {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
-        random = new Random();
     }
 
-    public Quote getQuote() {
-    	this.open();
-        Cursor c = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                            "NOT read", null, null, null, null);
-        if (c.getCount() == 0) {
-            c = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                         "read", null, null, null, null);
-            if (c.getCount() == 0) {
-            	this.close();
-                return null;
-            }
-        }
-        int offset = this.random.nextInt(c.getCount());
-        c.moveToPosition(offset);
-        Quote q = new Quote(c.getString(0), c.getString(1), c.getString(2), c.getString(4), c.getInt(4) > 0, c.getInt(5) > 0);
-        this.close();
-        return q;
-    }
-
-    public Quote getQuote(String link) {
-    	this.open();
-        Cursor c = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                            "link =" + link, null, null, null, null);
-        // TODO: SQL-escape link
-
-        if (c.getCount() == 0) {
-            this.close();
-            return null;
-        } else {
-        	c.moveToFirst();
-            Quote q = new Quote(c.getString(0), c.getString(1), c.getString(2), c.getString(4), c.getInt(4) > 0, c.getInt(5) > 0);
-            this.close();
-            return q;
-        }
+    /**
+     * @TODO: getActivities
+     */
+    public List<ActivityP> getActivities(String search_str) {
+    	ArrayList<ActivityP> acts = new ArrayList<ActivityP>();
+    	
+    	
+		return acts;
    }
 
-    public List<Quote> getFaves() {
-    	this.open();
-        Cursor c = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                            "fav", null, null, null, null);
-
-        if (c.getCount() == 0) {
-            this.close();
-            return null;
-        } else {
-        	List<Quote> rez = new ArrayList<Quote>();
-            c.moveToFirst();
-            for (int i = 0; i < c.getCount(); i++) {
-            	rez.add(new Quote(c.getString(0), c.getString(1), c.getString(2), c.getString(4), c.getInt(4) > 0, c.getInt(5) > 0));
-            	c.moveToNext();
-            }
-            this.close();
-            return rez;
-        }
-   }
-
-    public List<Quote> findQuotes(String search_str) {
-    	this.open();
-        Cursor c = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                            "txt LIKE '%" + search_str + "%' OR author LIKE '%" + search_str + "%'", null, null, null, null);
-        // TODO: SQL-escape link
-
-        if (c.getCount() == 0) {
-            this.close();
-            return null;
-        } else {
-        	List<Quote> rez = new ArrayList<Quote>();
-            c.moveToFirst();
-            for (int i = 0; i < c.getCount(); i++) {
-            	rez.add(new Quote(c.getString(0), c.getString(1), c.getString(2), c.getString(4), c.getInt(4) > 0, c.getInt(5) > 0));
-            	c.moveToNext();
-            }
-            this.close();
-            return rez;
-        }
-   }
-
-    public int storeQuote(Quote quote) {
+    public void saveTimepoint(TimePoint point) {
     	this.open();
         ContentValues args = new ContentValues();
-        args.put("link", quote.getLink());
-        args.put("txt", quote.getText());
-        args.put("author", quote.getAuthor());
-        args.put("lang", quote.getLang());
-        args.put("read", quote.isRead());
-        args.put("fav", quote.isFav());
-        int rez = db.update("quote", args, "link = '" + quote.getLink() + "'", null);
+        args.put("uid", point.getuId() );
+        args.put("catId", point.getCatId());
+        args.put("startPoint", point.getPointStar());
+        args.put("endPiont", point.getPointEnd());
+        db.insert("quote", null, args);
         this.close();
-        return rez;
     }
 
-    public void storeQuotes(List<Quote> quotes) {
+    public void storeActivities(List<ActivityP> activities) {
     	this.open();
-        for (Quote quote : quotes) {
+        for (ActivityP act : activities) {
             ContentValues args = new ContentValues();
-            args.put("link", quote.getLink());
-            args.put("txt", quote.getText());
-            args.put("author", quote.getAuthor());
-            args.put("lang", quote.getLang());
-            args.put("read", quote.isRead());
-            args.put("fav", quote.isFav());
+            args.put("uid", act.getUserId() );
+            args.put("parentId", act.getProfileUrl() );
+            args.put("name", act.getName() );
+            args.put("description",act.getDescription());
+            args.put("coordX", act.getCoordX() );
+            args.put("coordY", act.getCoordX() );
+            args.put("radius", act.getRadius() );
             db.insert("quote", null, args);
+            
         }
         this.close();
     }
 
-    public int unreadCount() {
-    	this.open();
-        //return db.rawQuery("SELECT COUNT(*) FROM quote WHERE NOT read",null).getInt(0);
-      	int rez = db.query("quote", new String[] {"txt", "author", "link", "lang", "read", "fav"},
-                           "NOT read", null, null, null, null).getCount();
-    	this.close();
-    	return rez;
-    }
+    
 
     static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -172,7 +95,8 @@ public class Storage {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS quote");
+            db.execSQL("DROP TABLE IF EXISTS timeline");
+            db.execSQL("DROP TABLE IF EXISTS activity");
             onCreate(db);
        }
    }
