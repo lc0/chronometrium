@@ -1,7 +1,18 @@
 package org.quoDroid.gui;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.quoDroid.R;
 import org.quoDroid.logic.ActivityP;
 import org.quoDroid.logic.Storage;
@@ -153,15 +164,38 @@ public class QuoMainActivity extends Activity {
 		else {
 			tmpoint.setPointEnd(new Date().getTime());
 			//localStore.saveTimepoint(tmpoint);
-		}
 			
+			List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+			nvps.add(new BasicNameValuePair("StartTime", Double.toString(tmpoint.getPointStar())));
+			nvps.add(new BasicNameValuePair("EndTime", Double.toString(tmpoint.getPointStar())));
+			
+			nvps.add(new BasicNameValuePair("CategoryID", Integer.toString(currentActivity.getCategoryId()) ));
+		}	
 		
 		
-		
-		
-		
-		
-		
+	}
+	
+	public void pushTimeline(List <NameValuePair> params) {
+		HttpPost request = new HttpPost("http://chronometrium.apphb.com/Api/PostTimeLines");
+		request.setHeader("Accept", "application/json");
+		request.setHeader("Content-type", "application/json");
+		/*... Building the NameValuePairs object ... */
+		try {
+			request.setEntity(new UrlEncodedFormEntity(params));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		try {
+			HttpResponse response = httpClient.execute(request);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
