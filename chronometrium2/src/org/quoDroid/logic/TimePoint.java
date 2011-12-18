@@ -3,18 +3,18 @@ package org.quoDroid.logic;
 public class TimePoint {
 	private int catId;
 	private int uId;
-	private int pointStar;
-	private int pointEnd;
+	private double pointStar;
+	private double pointEnd;
 	
 	public TimePoint(int catId, int uId) {
 		super();
 		this.catId = catId;
 		this.uId = uId;
 	}
-	public void setPointStar(int pointStar) {
+	public void setPointStar(double pointStar) {
 		this.pointStar = pointStar;
 	}
-	public void setPointEnd(int pointEnd) {
+	public void setPointEnd(double pointEnd) {
 		this.pointEnd = pointEnd;
 	}
 	
@@ -27,10 +27,10 @@ public class TimePoint {
 	public int getuId() {
 		return uId;
 	}
-	public int getPointStar() {
+	public double getPointStar() {
 		return pointStar;
 	}
-	public int getPointEnd() {
+	public double getPointEnd() {
 		return pointEnd;
 	}
 	

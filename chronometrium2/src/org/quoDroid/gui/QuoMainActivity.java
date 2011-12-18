@@ -1,7 +1,12 @@
 package org.quoDroid.gui;
 
+import java.util.Date;
+
 import org.quoDroid.R;
 import org.quoDroid.logic.ActivityP;
+import org.quoDroid.logic.Storage;
+import org.quoDroid.logic.TimePoint;
+import org.quoDroid.logic.User;
 //import org.quoDroid.logic.Quote;
 //import org.quoDroid.logic.QuoteHelper;
 import org.quoDroid.logic.SocialLink;
@@ -9,6 +14,7 @@ import org.quoDroid.logic.SocialLink;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,14 +33,20 @@ public class QuoMainActivity extends Activity {
 	//private Quote currentQuote;
 	
 	private ActivityP currentActivity;
+	boolean fl;
 
 	public static final int TWITTER_ID = Menu.FIRST;
 	public static final int FACEBOOK_ID = Menu.FIRST + 1;
 	public static final int VK_ID = Menu.FIRST + 2;
 	public static final int FAVE_ID = Menu.FIRST + 3;
+	
+	private Storage localStore;
+	private User currentUser;
+	private TimePoint tmpoint;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		//quoteHelper = new QuoteHelper(getApplicationContext());
 		setContentView(R.layout.main);
@@ -50,6 +62,8 @@ public class QuoMainActivity extends Activity {
 				
 				RealViewSwitcher r = (RealViewSwitcher) findViewById(R.id.switcher);
 				r.setCurrentScreen(0);
+				
+				localStore = new Storage(getBaseContext());
 				
 				//Quote nextQuote = quoteHelper.getRandomQuote();
 				currentActivity =  new ActivityP(30.525553, 50.451611, 5, "center of Kiev", "center of Kiev", 1324154786, 2);
@@ -126,7 +140,27 @@ public class QuoMainActivity extends Activity {
 
 	protected void trackMyPlace(Location location) {
 		// TODO Auto-generated method stub
+
+		currentUser = new User(2);
 		Log.v("LOG_TAG", location.toString());
+		TimePoint tmpoint = new TimePoint(currentUser.getUid(), currentActivity.getCategoryId());
+		
+		if (fl) {
+			currentActivity =  new ActivityP(30.525553, 50.451611, 5, "center of Kiev", "center of Kiev", 1324154786, 2);
+			//location.getLongitude(), location.getLatitude()			
+			tmpoint.setPointStar(new Date().getTime());
+		}
+		else {
+			tmpoint.setPointEnd(new Date().getTime());
+			//localStore.saveTimepoint(tmpoint);
+		}
+			
+		
+		
+		
+		
+		
+		
 		
 	}
 
