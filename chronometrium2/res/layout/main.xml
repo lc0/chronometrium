@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="#f1f1f1"
+	android:gravity="center">
+	<org.quoDroid.gui.RealViewSwitcher
+		android:orientation="vertical" android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:background="#f1f1f1"
+		android:gravity="center"
+		android:id="@+id/switcher">
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:background="#f1f1f1" android:gravity="center" android:id="@+id/Current">
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="center"
+				android:capitalize="sentences" android:textColor="#000000"
+				android:id="@+id/quote_view" />
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="right"
+				android:paddingRight="30dip" android:capitalize="sentences"
+				android:text="author" android:id="@+id/quote_author" />
+		</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="fill_parent" android:layout_height="fill_parent"
+			android:background="#f1f1f1" android:gravity="center" android:id="@+id/Next">
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="center"
+				android:capitalize="sentences" android:textColor="#000000"
+				android:id="@+id/quote_view2" />
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:gravity="right"
+				android:paddingRight="30dip" android:capitalize="sentences"
+				android:text="author2" android:id="@+id/quote_author2" />
+		</LinearLayout>
+	</org.quoDroid.gui.RealViewSwitcher>
+</LinearLayout>
+
