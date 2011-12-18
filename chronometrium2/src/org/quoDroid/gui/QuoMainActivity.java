@@ -92,7 +92,7 @@ public class QuoMainActivity extends Activity {
 			  };
 
 			// Register the listener with the Location Manager to receive location updates
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER , 0, 0, locationListener);
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER , 0, 0, locationListener);
 			
 			Log.v("LOG_TAG", "Testing is working correctly");
 			
